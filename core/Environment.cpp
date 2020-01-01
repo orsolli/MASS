@@ -84,6 +84,11 @@ Initialize(const std::string& meta_file,bool load_obj)
 				cyclic = true;
 			character->LoadBVH(std::string(MASS_ROOT_DIR)+str2,cyclic);
 		}
+		else if(!index.compare("joystick")) {
+			double x,y,z;
+			ss>>x>>y>>z;
+			character->SetJoystick(x,y,z);
+		}
 		else if(!index.compare("reward_param")){
 			double a,b,c,d;
 			ss>>a>>b>>c>>d;
@@ -311,6 +316,8 @@ GetState()
 	p *= 0.8;
 	v *= 0.2;
 
+	Eigen::Vector3d j = mCharacter->GetJoystick();
+
 	Eigen::VectorXd state(p.rows()+v.rows()+1);
 
 	state<<p,v,phi;
@@ -380,11 +387,11 @@ GetReward()
 	skel->computeForwardKinematics(true,false,false);
 
 	double r_q = exp_of_squared(p_diff,2.0);
-	double r_v = exp_of_squared(v_diff,0.1);
+	double r_v = exp_of_squared(v_diff_all,0.1);
 	double r_ee = exp_of_squared(ee_diff,40.0);
 	double r_com = exp_of_squared(com_diff,10.0);
 
-	double r = r_ee*(w_q*r_q + w_v*r_v);
+	double r = w_q*r_q*r_ee + w_v*r_v;
 
 	return r;
 }

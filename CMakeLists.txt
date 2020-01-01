@@ -10,6 +10,8 @@ endif(NOT CMAKE_BUILD_TYPE)
 add_compile_options(-fPIC)
 add_compile_options(-std=gnu++11)
 add_compile_options(-Wdeprecated-declarations)
+add_compile_options(-g)
+add_compile_options(-O0)
 
 add_compile_options(-DHAVE_CSTDDEF)
 add_definitions(-DMASS_ROOT_DIR="${CMAKE_HOME_DIRECTORY}")

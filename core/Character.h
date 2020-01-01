@@ -28,6 +28,8 @@ public:
 	const std::vector<Muscle*>& GetMuscles() {return mMuscles;}
 	const std::vector<dart::dynamics::BodyNode*>& GetEndEffectors(){return mEndEffectors;}
 	BVH* GetBVH(){return mBVH;}
+	Eigen::VectorXd GetJoystick(){return mJoystick;}
+	void SetJoystick(double x, double y, double z){ mJoystick << x,y,z; }
 public:
 	dart::dynamics::SkeletonPtr mSkeleton;
 	BVH* mBVH;
@@ -35,6 +37,8 @@ public:
 
 	std::vector<Muscle*> mMuscles;
 	std::vector<dart::dynamics::BodyNode*> mEndEffectors;
+
+	Eigen::Vector3d mJoystick;
 
 	Eigen::VectorXd mKp, mKv;
 

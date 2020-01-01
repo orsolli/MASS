@@ -45,7 +45,7 @@ public:
 	int GetControlHz(){return mControlHz;}
 	int GetSimulationHz(){return mSimulationHz;}
 	int GetNumTotalRelatedDofs(){return mCurrentMuscleTuple.JtA.rows();}
-	std::vector<MuscleTuple>& GetMuscleTuples(){return mMuscleTuples;};
+	std::vector<MuscleTuple>& GetMuscleTuples(){return mMuscleTuples;}
 	int GetNumState(){return mNumState;}
 	int GetNumAction(){return mNumActiveDof;}
 	int GetNumSteps(){return mSimulationHz/mControlHz;}

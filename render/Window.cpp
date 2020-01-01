@@ -92,12 +92,7 @@ draw()
 	DrawGround(y);
 	DrawMuscles(mEnv->GetCharacter()->GetMuscles());
 	DrawSkeleton(mEnv->GetCharacter()->GetSkeleton());
-
-	// Eigen::Quaterniond q = mTrackBall.getCurrQuat();
-	// q.x() = 0.0;
-	// q.z() = 0.0;
-	// q.normalize();
-	// mTrackBall.setQuaternion(q);
+	DrawJoystick(mEnv->GetCharacter()->GetSkeleton()->getCOM(), mEnv->GetCharacter()->GetJoystick());
 	SetFocusing();
 }
 void
@@ -531,6 +526,28 @@ DrawGround(double y)
 			glVertex3f(x,y,z+1.0);
 		}
 	}
+	glEnd();
+	glEnable(GL_LIGHTING);
+}
+void
+Window::
+DrawJoystick(Eigen::Vector3d position, Eigen::Vector3d direction)
+{
+	
+	glBegin(GL_LINES);
+
+	glColor3f(1,0,0);
+	double x,y,z;
+	x = position[0];
+	y = position[1];
+	z = position[2];
+	double dx,dy,dz;
+	dx = direction[0];
+	dy = direction[1];
+	dz = direction[2];
+	glVertex3f(x,y,z);
+	glVertex3f(dx + x,dy + y,dz + z);
+
 	glEnd();
 	glEnable(GL_LIGHTING);
 }
