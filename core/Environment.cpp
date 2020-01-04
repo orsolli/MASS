@@ -18,7 +18,7 @@ Environment()
 
 void
 Environment::
-Initialize(const std::string& meta_file,bool load_obj)
+Initialize(const std::string& meta_file,bool load_obj, int id)
 {
 	std::ifstream ifs(meta_file);
 	if(!(ifs.is_open()))
@@ -27,6 +27,7 @@ Initialize(const std::string& meta_file,bool load_obj)
 		return;
 	}
 	std::string str;
+	std::string prefix = "";
 	std::string index;
 	std::stringstream ss;
 	MASS::Character* character = new MASS::Character();
@@ -75,7 +76,14 @@ Initialize(const std::string& meta_file,bool load_obj)
 			if(this->GetUseMuscle())
 				character->LoadMuscles(std::string(MASS_ROOT_DIR)+str2);
 		}
-		else if(!index.compare("bvh_file")){
+		else if(!index.compare("num_envs")){
+			int num_envs;
+			ss>>num_envs;
+			if (num_envs) {
+				prefix = (id % num_envs);
+			}
+		}
+		else if(!index.compare(prefix + "bvh_file")){
 			std::string str2,str3;
 
 			ss>>str2>>str3;
@@ -84,7 +92,7 @@ Initialize(const std::string& meta_file,bool load_obj)
 				cyclic = true;
 			character->LoadBVH(std::string(MASS_ROOT_DIR)+str2,cyclic);
 		}
-		else if(!index.compare("joystick")) {
+		else if(!index.compare(prefix + "joystick")) {
 			double x,y,z;
 			ss>>x>>y>>z;
 			character->SetJoystick(x,y,z);

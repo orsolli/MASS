@@ -12,7 +12,7 @@ EnvManager(std::string meta_file,int num_envs)
 		mEnvs.push_back(new MASS::Environment());
 		MASS::Environment* env = mEnvs.back();
 
-		env->Initialize(meta_file,false);
+		env->Initialize(meta_file,false,i);
 		// env->SetUseMuscle(false);
 		// env->SetControlHz(30);
 		// env->SetSimulationHz(600);
