@@ -139,7 +139,38 @@ GetTargetPositions(double t,double dt)
 	T_current = mBVH->GetT0().inverse()*T_current;
 	Eigen::Isometry3d T_head = mTc*T_current;
 	Eigen::Vector6d p_head = dart::dynamics::FreeJoint::convertToPositions(T_head);
-	p.head<6>() = p_head;
+	
+	// std::cout <<
+	// std::endl << "Head:" <<
+	// std::endl << p_head <<
+	// std::endl;
+
+
+	Eigen::Vector3d const& eye = p_head.head(3);
+	Eigen::Vector3d const& center = eye.head(3) + this->GetJoystick();
+	Eigen::Vector3d up; up << 0,0,1;
+	
+	Eigen::Vector3d f = center - eye;
+	Eigen::Vector3d u = up.normalized();
+	Eigen::Vector3d c = u.cross(f);
+
+	double Ws = 1;
+	double Wr = u.dot(f)+1;
+	Eigen::Vector3d Vs = p_head.segment(3,3);
+	Eigen::Vector3d Vr = c;
+	
+	Eigen::Vector4d rotation;
+	rotation << Ws*Vr + Wr*Vs + Vr.cross(Vs), Ws*Wr - Vs.dot(Vr);
+	Eigen::Vector6d rotate_p_head;
+	rotate_p_head << p_head.segment(0,3), rotation.segment(0,3)/rotation[3];
+
+	// std::cout <<
+	// std::endl << "Rotated:" <<
+	// std::endl << rotate_p_head <<
+	// std::endl <<
+	// std::endl;
+
+	p.head<6>() = rotate_p_head;
 	
 	
 	if(mBVH->IsCyclic())
@@ -171,7 +202,7 @@ GetTargetPositions(double t,double dt)
 			mTc.translation()[1] = 0.0;
 		}
 	}
-	
+
 
 	return p;
 }
