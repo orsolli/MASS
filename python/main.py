@@ -20,6 +20,10 @@ import numpy as np
 from pymss import EnvManager
 from IPython import embed
 from Model import *
+
+import wandb
+wandb.init(project="emass")
+
 use_cuda = torch.cuda.is_available()
 FloatTensor = torch.cuda.FloatTensor if use_cuda else torch.FloatTensor
 LongTensor = torch.cuda.LongTensor if use_cuda else torch.LongTensor
@@ -396,8 +400,22 @@ if __name__=="__main__":
 		ppo.LoadModel(args.model)
 	else:
 		ppo.SaveModel()
+	wandb.watch(ppo.model)
 	print('num states: {}, num actions: {}'.format(ppo.env.GetNumState(),ppo.env.GetNumAction()))
 	for i in range(ppo.max_iteration-5):
 		ppo.Train()
 		rewards = ppo.Evaluate()
 		Plot(rewards,'reward',0,False)
+		wandb.log({
+			"Loss Actor": ppo.loss_actor,
+			"Loss Critic": ppo.loss_critic,
+			"Loss Muscle": ppo.loss_muscle,
+			"Noise": ppo.model.log_std.exp().mean(),
+			"Num Transition So far": ppo.num_tuple_so_far,
+			"Num Transition": ppo.num_tuple,
+			"Num Episode": ppo.num_episode,
+			"Avg Return per episode": ppo.sum_return/ppo.num_episode,
+			"Avg Reward per transition": ppo.sum_return/ppo.num_tuple,
+			"Avg Step per episode": ppo.num_tuple/ppo.num_episode,
+			"Max Avg Retun So far": ppo.max_return
+		})
