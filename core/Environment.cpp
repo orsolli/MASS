@@ -318,9 +318,9 @@ GetState()
 
 	Eigen::Vector3d j = mCharacter->GetJoystick();
 
-	Eigen::VectorXd state(p.rows()+v.rows()+1);
+	Eigen::VectorXd state(p.rows()+v.rows()+j.rows()+1);
 
-	state<<p,v,phi;
+	state<<p,v,j,phi;
 	return state;
 }
 void 
