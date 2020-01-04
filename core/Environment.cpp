@@ -363,7 +363,9 @@ GetReward()
 	Eigen::VectorXd v_diff_all = skel->getPositionDifferences(mTargetVelocities,cur_vel);
 
 	Eigen::VectorXd p_diff = Eigen::VectorXd::Zero(skel->getNumDofs());
-	Eigen::VectorXd v_diff = Eigen::VectorXd::Zero(skel->getNumDofs());
+	Eigen::Vector3d vel = skel->getCOMLinearVelocity();
+	Eigen::Vector3d joy = mCharacter->GetJoystick();
+	double v_diff = std::abs(1-vel.dot(joy)/(vel.norm()*joy.norm()));
 
 	const auto& bvh_map = mCharacter->GetBVH()->GetBVHMap();
 
@@ -398,7 +400,7 @@ GetReward()
 	skel->computeForwardKinematics(true,false,false);
 
 	double r_q = exp_of_squared(p_diff,2.0);
-	double r_v = exp_of_squared(v_diff,0.1);
+	double r_v = 1 - std::min(1.0, v_diff/2);
 	double r_ee = exp_of_squared(ee_diff,40.0);
 	double r_com = exp_of_squared(com_diff,10.0);
 
