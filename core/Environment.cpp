@@ -387,11 +387,11 @@ GetReward()
 	skel->computeForwardKinematics(true,false,false);
 
 	double r_q = exp_of_squared(p_diff,2.0);
-	double r_v = exp_of_squared(v_diff_all,0.1);
+	double r_v = exp_of_squared(v_diff,0.1);
 	double r_ee = exp_of_squared(ee_diff,40.0);
 	double r_com = exp_of_squared(com_diff,10.0);
 
-	double r = w_q*r_q*r_ee + w_v*r_v;
+	double r = r_ee*(w_q*r_q + w_v*r_v);
 
 	return r;
 }
