@@ -4,6 +4,7 @@
 #include "BVH.h"
 #include "Muscle.h"
 #include "dart/collision/bullet/bullet.hpp"
+#include <sstream>
 using namespace dart;
 using namespace dart::simulation;
 using namespace dart::dynamics;
@@ -80,7 +81,9 @@ Initialize(const std::string& meta_file,bool load_obj, int id)
 			int num_envs;
 			ss>>num_envs;
 			if (num_envs) {
-				prefix = (id % num_envs);
+				std::stringstream intToStr;
+				intToStr << (id % num_envs);
+				prefix = intToStr.str();
 			}
 		}
 		else if(!index.compare(prefix + "bvh_file")){
