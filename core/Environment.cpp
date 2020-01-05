@@ -74,8 +74,7 @@ Initialize(const std::string& meta_file,bool load_obj, int id)
 		else if(!index.compare("muscle_file")){
 			std::string str2;
 			ss>>str2;
-			if(this->GetUseMuscle())
-				character->LoadMuscles(std::string(MASS_ROOT_DIR)+str2);
+			character->LoadMuscles(std::string(MASS_ROOT_DIR)+str2);
 		}
 		else if(!index.compare("num_envs")){
 			int num_envs;
@@ -134,19 +133,18 @@ Initialize()
 	else
 		mRootJointDof = 0;
 	mNumActiveDof = mCharacter->GetSkeleton()->getNumDofs()-mRootJointDof;
-	if(mUseMuscle)
-	{
-		int num_total_related_dofs = 0;
-		for(auto m : mCharacter->GetMuscles()){
-			m->Update();
-			num_total_related_dofs += m->GetNumRelatedDofs();
-		}
-		mCurrentMuscleTuple.JtA = Eigen::VectorXd::Zero(num_total_related_dofs);
-		mCurrentMuscleTuple.L = Eigen::MatrixXd::Zero(mNumActiveDof,mCharacter->GetMuscles().size());
-		mCurrentMuscleTuple.b = Eigen::VectorXd::Zero(mNumActiveDof);
-		mCurrentMuscleTuple.tau_des = Eigen::VectorXd::Zero(mNumActiveDof);
-		mActivationLevels = Eigen::VectorXd::Zero(mCharacter->GetMuscles().size());
+
+	int num_total_related_dofs = 0;
+	for(auto m : mCharacter->GetMuscles()){
+		m->Update();
+		num_total_related_dofs += m->GetNumRelatedDofs();
 	}
+	mCurrentMuscleTuple.JtA = Eigen::VectorXd::Zero(num_total_related_dofs);
+	mCurrentMuscleTuple.L = Eigen::MatrixXd::Zero(mNumActiveDof,mCharacter->GetMuscles().size());
+	mCurrentMuscleTuple.b = Eigen::VectorXd::Zero(mNumActiveDof);
+	mCurrentMuscleTuple.tau_des = Eigen::VectorXd::Zero(mNumActiveDof);
+	mActivationLevels = Eigen::VectorXd::Zero(mCharacter->GetMuscles().size());
+
 	mWorld->setGravity(Eigen::Vector3d(0,-9.8,0.0));
 	mWorld->setTimeStep(1.0/mSimulationHz);
 	mWorld->getConstraintSolver()->setCollisionDetector(dart::collision::BulletCollisionDetector::create());
