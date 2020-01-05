@@ -93,6 +93,7 @@ draw()
 	DrawMuscles(mEnv->GetCharacter()->GetMuscles());
 	DrawSkeleton(mEnv->GetCharacter()->GetSkeleton());
 	DrawJoystick(mEnv->GetCharacter()->GetSkeleton()->getCOM(), mEnv->GetCharacter()->GetJoystick());
+	DrawJoystick(mEnv->GetCharacter()->GetSkeleton()->getCOM(), mEnv->GetCharacter()->GetSkeleton()->getCOMLinearVelocity());
 	SetFocusing();
 }
 void
