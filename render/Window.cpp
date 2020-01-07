@@ -100,6 +100,7 @@ void
 Window::
 keyboard(unsigned char _key, int _x, int _y)
 {
+	Eigen::Vector3d increment;
 	switch (_key)
 	{
 	case 's': this->Step();break;
@@ -107,6 +108,26 @@ keyboard(unsigned char _key, int _x, int _y)
 	case 'r': this->Reset();break;
 	case ' ': mSimulating = !mSimulating;break;
 	case 'o': mDrawOBJ = !mDrawOBJ;break;
+	case 'j':
+		increment << 0.25,0.0,0.0;
+		mEnv->GetCharacter()->SetJoystick(mEnv->GetCharacter()->GetJoystick() + increment);
+		std::cout << mEnv->GetCharacter()->GetJoystick() + increment << std::endl;
+		break;
+	case 'i':
+		increment << 0.0,0.0,0.25;
+		mEnv->GetCharacter()->SetJoystick(mEnv->GetCharacter()->GetJoystick() + increment);
+		std::cout << mEnv->GetCharacter()->GetJoystick() + increment << std::endl;
+		break;
+	case 'l':
+		increment << -0.25,0.0,0.0;
+		mEnv->GetCharacter()->SetJoystick(mEnv->GetCharacter()->GetJoystick() + increment);
+		std::cout << mEnv->GetCharacter()->GetJoystick() + increment << std::endl;
+		break;
+	case 'k':
+		increment << 0.0,0.0,-0.25;
+		mEnv->GetCharacter()->SetJoystick(mEnv->GetCharacter()->GetJoystick() + increment);
+		std::cout << mEnv->GetCharacter()->GetJoystick() + increment << std::endl;
+		break;
 	case 27 : exit(0);break;
 	default:
 		Win3D::keyboard(_key,_x,_y);break;
