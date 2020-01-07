@@ -184,6 +184,9 @@ void
 BVH::
 Parse(const std::string& file,bool cyclic)
 {
+	// With 360, you sould ignore joystick initially
+	// With Joystick, y_rotation = 180 - std:rand() % 180;
+	int y_rotation = std::rand() % 360;
 	mCyclic = cyclic;
 	std::ifstream is(file);
 
@@ -224,6 +227,7 @@ Parse(const std::string& file,bool cyclic)
 					is>>val;
 					mMotions[i][j]=val;
 				}
+				mMotions[i][5] += y_rotation;
 			}
 		}
 	}
