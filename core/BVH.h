@@ -72,6 +72,7 @@ private:
 	double mTimeStep;
 	int mNumTotalChannels;
 	int mNumTotalFrames;
+	int y_rotation;
 
 	BVHNode* mRoot;
 

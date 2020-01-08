@@ -26,6 +26,17 @@ Eigen::Matrix3d R_y(double y)
 		-sina,0,cosa;
 	return R;	
 }
+Eigen::Matrix4d R4_y(double y)
+{
+	double cosa = cos(y*3.141592/180.0);
+	double sina = sin(y*3.141592/180.0);
+	Eigen::Matrix4d R;
+	R <<cosa ,0,sina,   0,
+		0    ,1,   0,   0,
+		-sina,0,cosa,   0,
+		0    ,0,   0,   1;
+	return R;	
+}
 Eigen::Matrix3d R_z(double z)
 {
 	double cosa = cos(z*3.141592/180.0);
@@ -146,6 +157,9 @@ GetMotion(double t)
 			Eigen::Isometry3d T;
 			T.translation() = 0.01*m_t.segment<3>(0);
 			T.linear() = R;
+			if (!idx) {
+				T.matrix() *= R4_y(y_rotation);
+			}
 			p.segment<6>(idx) = FreeJoint::convertToPositions(T);
 		}
 		else if(jn->getType()=="BallJoint")
@@ -186,7 +200,7 @@ Parse(const std::string& file,bool cyclic)
 {
 	// With 360, you sould ignore joystick initially
 	// With Joystick, y_rotation = 180 - std:rand() % 180;
-	int y_rotation = std::rand() % 360;
+	y_rotation = std::rand() % 360;
 	mCyclic = cyclic;
 	std::ifstream is(file);
 
@@ -227,7 +241,6 @@ Parse(const std::string& file,bool cyclic)
 					is>>val;
 					mMotions[i][j]=val;
 				}
-				mMotions[i][5] += y_rotation;
 			}
 		}
 	}
@@ -240,12 +253,14 @@ Parse(const std::string& file,bool cyclic)
 	mMap[root_bvh_name]->Set(m);
 	T0.linear() = this->Get(root_bvh_name);
 	T0.translation() = 0.01*m.segment<3>(0);
+	T0.matrix() *= R4_y(y_rotation);
 
 	m = mMotions[mNumTotalFrames-1];
 
 	mMap[root_bvh_name]->Set(m);
 	T1.linear() = this->Get(root_bvh_name);
 	T1.translation() = 0.01*m.segment<3>(0);
+	T1.matrix() *= R4_y(y_rotation);
 
 
 }
