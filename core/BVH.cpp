@@ -158,7 +158,7 @@ GetMotion(double t)
 			T.translation() = 0.01*m_t.segment<3>(0);
 			T.linear() = R;
 			if (!idx) {
-				T.matrix() *= R4_y(y_rotation);
+				T.matrix() = R4_y(y_rotation) * T.matrix();
 			}
 			p.segment<6>(idx) = FreeJoint::convertToPositions(T);
 		}
@@ -253,14 +253,14 @@ Parse(const std::string& file,bool cyclic)
 	mMap[root_bvh_name]->Set(m);
 	T0.linear() = this->Get(root_bvh_name);
 	T0.translation() = 0.01*m.segment<3>(0);
-	T0.matrix() *= R4_y(y_rotation);
+	T0.matrix() = R4_y(y_rotation) * T0.matrix();
 
 	m = mMotions[mNumTotalFrames-1];
 
 	mMap[root_bvh_name]->Set(m);
 	T1.linear() = this->Get(root_bvh_name);
 	T1.translation() = 0.01*m.segment<3>(0);
-	T1.matrix() *= R4_y(y_rotation);
+	T1.matrix() = R4_y(y_rotation) * T1.matrix();
 
 
 }
