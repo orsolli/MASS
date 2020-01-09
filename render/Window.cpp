@@ -92,6 +92,18 @@ draw()
 	DrawGround(y);
 	DrawMuscles(mEnv->GetCharacter()->GetMuscles());
 	DrawSkeleton(mEnv->GetCharacter()->GetSkeleton());
+
+	// Draw next skel
+	Eigen::VectorXd pos = mEnv->GetCharacter()->GetSkeleton()->getPositions();
+	double t = mEnv->GetWorld()->getTime();
+	std::pair<Eigen::VectorXd,Eigen::VectorXd> pv = mEnv->GetCharacter()->GetTargetPosAndVel(t+1,1.0/60);
+	mEnv->GetCharacter()->GetSkeleton()->setPositions(pv.first);
+	mEnv->GetCharacter()->GetSkeleton()->computeForwardKinematics(true,false,false);
+	DrawSkeleton(mEnv->GetCharacter()->GetSkeleton());
+	mEnv->GetCharacter()->GetSkeleton()->setPositions(pos);
+	mEnv->GetCharacter()->GetSkeleton()->computeForwardKinematics(true,false,false);
+
+
 	DrawJoystick(mEnv->GetCharacter()->GetSkeleton()->getCOM(), mEnv->GetCharacter()->GetJoystick());
 	DrawJoystick(mEnv->GetCharacter()->GetSkeleton()->getCOM(), mEnv->GetCharacter()->GetSkeleton()->getCOMLinearVelocity());
 	SetFocusing();

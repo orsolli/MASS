@@ -164,6 +164,7 @@ Reset(bool RSI)
 	mCharacter->GetSkeleton()->clearConstraintImpulses();
 	mCharacter->GetSkeleton()->clearInternalForces();
 	mCharacter->GetSkeleton()->clearExternalForces();
+	mCharacter->GetSkeleton()->resetVelocities();
 	
 	double t = 0.0;
 
@@ -179,7 +180,7 @@ Reset(bool RSI)
 	mTargetVelocities = pv.second;
 
 	mCharacter->GetSkeleton()->setPositions(mTargetPositions);
-	mCharacter->GetSkeleton()->setVelocities(mTargetVelocities);
+	//mCharacter->GetSkeleton()->setVelocities(mTargetVelocities);
 	mCharacter->GetSkeleton()->computeForwardKinematics(true,false,false);
 }
 void

@@ -141,7 +141,6 @@ GetMotion(double t)
 	for(auto& bn: mMap)
 		bn.second->Set(m_t);
 	
-	
 	int dof = mSkeleton->getNumDofs();
 	Eigen::VectorXd p = Eigen::VectorXd::Zero(dof);
 
@@ -157,9 +156,6 @@ GetMotion(double t)
 			Eigen::Isometry3d T;
 			T.translation() = 0.01*m_t.segment<3>(0);
 			T.linear() = R;
-			if (!idx) {
-				T.matrix() = R4_y(y_rotation) * T.matrix();
-			}
 			p.segment<6>(idx) = FreeJoint::convertToPositions(T);
 		}
 		else if(jn->getType()=="BallJoint")
@@ -199,7 +195,7 @@ BVH::
 Parse(const std::string& file,bool cyclic)
 {
 	// With 360, you sould ignore joystick initially
-	// With Joystick, y_rotation = 180 - std:rand() % 180;
+	// With Joystick, y_rotation = 180 - std::rand() % 180;
 	y_rotation = std::rand() % 360;
 	mCyclic = cyclic;
 	std::ifstream is(file);
@@ -241,6 +237,8 @@ Parse(const std::string& file,bool cyclic)
 					is>>val;
 					mMotions[i][j]=val;
 				}
+				mMotions[i].segment<3>(0) = R_y(y_rotation) * mMotions[i].segment<3>(0);
+				mMotions[i][5] += y_rotation;
 			}
 		}
 	}
@@ -253,14 +251,12 @@ Parse(const std::string& file,bool cyclic)
 	mMap[root_bvh_name]->Set(m);
 	T0.linear() = this->Get(root_bvh_name);
 	T0.translation() = 0.01*m.segment<3>(0);
-	T0.matrix() = R4_y(y_rotation) * T0.matrix();
 
 	m = mMotions[mNumTotalFrames-1];
 
 	mMap[root_bvh_name]->Set(m);
 	T1.linear() = this->Get(root_bvh_name);
 	T1.translation() = 0.01*m.segment<3>(0);
-	T1.matrix() = R4_y(y_rotation) * T1.matrix();
 
 
 }
