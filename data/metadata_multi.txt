@@ -4,12 +4,14 @@ sim_hz 1500
 skel_file /data/human.xml
 muscle_file /data/muscle284.xml
 #            bvh  joy
-reward_param 0.75 0.0 0.0 0.15
-num_envs 4
+reward_param 0.55 0.45 0.0 0.15
+num_envs 2
 0bvh_file /data/motion/walk.bvh true
 0joystick 0.0 0.0 1.0
-1bvh_file /data/motion/run.bvh true
-1joystick 0.0 0.0 5.0
+1bvh_file /data/motion/walk.bvh true
+1joystick 0.0 0.0 1.5
+#1bvh_file /data/motion/run.bvh true
+#1joystick 0.0 0.0 5.0
 2bvh_file /data/motion/walk.bvh true
 2joystick 0.707 0.0 0.707
 3bvh_file /data/motion/walk.bvh true

@@ -196,7 +196,7 @@ Parse(const std::string& file,bool cyclic)
 {
 	// With 360, you sould ignore joystick initially
 	// With Joystick, y_rotation = 180 - std::rand() % 180;
-	y_rotation = std::rand() % 360;
+	y_rotation = 0; //std::rand() % 360;
 	mCyclic = cyclic;
 	std::ifstream is(file);
 
