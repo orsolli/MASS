@@ -36,6 +36,9 @@ public:
 	void SetAction(const Eigen::VectorXd& a);
 	double GetReward();
 
+	void SetAngle(double angle) {mAngle = angle;}
+	double GetAngle() {return mAngle;}
+
 	Eigen::VectorXd GetDesiredTorques();
 	Eigen::VectorXd GetMuscleTorques();
 
@@ -62,6 +65,7 @@ private:
 	dart::dynamics::SkeletonPtr mGround;
 	Eigen::VectorXd mAction;
 	Eigen::VectorXd mTargetPositions,mTargetVelocities;
+	double mAngle;
 
 	int mNumState;
 	int mNumActiveDof;

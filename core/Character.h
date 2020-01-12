@@ -20,8 +20,8 @@ public:
 	void AddEndEffector(const std::string& body_name){mEndEffectors.push_back(mSkeleton->getBodyNode(body_name));}
 	Eigen::VectorXd GetSPDForces(const Eigen::VectorXd& p_desired);
 
-	Eigen::VectorXd GetTargetPositions(double t,double dt);
-	std::pair<Eigen::VectorXd,Eigen::VectorXd> GetTargetPosAndVel(double t,double dt);
+	Eigen::VectorXd GetTargetPositions(double t,double dt, bool update, int rotation = 0);
+	std::pair<Eigen::VectorXd,Eigen::VectorXd> GetTargetPosAndVel(double t,double dt, bool update, int rotation = 0);
 	
 	
 	const dart::dynamics::SkeletonPtr& GetSkeleton(){return mSkeleton;}

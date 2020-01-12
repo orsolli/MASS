@@ -140,7 +140,7 @@ GetMotion(double t)
 	
 	for(auto& bn: mMap)
 		bn.second->Set(m_t);
-	
+
 	int dof = mSkeleton->getNumDofs();
 	Eigen::VectorXd p = Eigen::VectorXd::Zero(dof);
 
@@ -194,9 +194,6 @@ void
 BVH::
 Parse(const std::string& file,bool cyclic)
 {
-	// With 360, you sould ignore joystick initially
-	// With Joystick, y_rotation = 180 - std::rand() % 180;
-	y_rotation = 0; //std::rand() % 360;
 	mCyclic = cyclic;
 	std::ifstream is(file);
 
@@ -237,8 +234,6 @@ Parse(const std::string& file,bool cyclic)
 					is>>val;
 					mMotions[i][j]=val;
 				}
-				mMotions[i].segment<3>(0) = R_y(y_rotation) * mMotions[i].segment<3>(0);
-				mMotions[i][5] += y_rotation;
 			}
 		}
 	}

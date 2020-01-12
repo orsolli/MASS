@@ -131,13 +131,13 @@ GetSPDForces(const Eigen::VectorXd& p_desired)
 }
 Eigen::VectorXd
 Character::
-GetTargetPositions(double t,double dt)
+GetTargetPositions(double t,double dt, bool update, int rotation)
 {
 	// std::cout<<"GetTargetPositions"<<std::endl;
 	Eigen::VectorXd p = mBVH->GetMotion(t);	
 	Eigen::Isometry3d T_current = dart::dynamics::FreeJoint::convertToTransform(p.head<6>());
 	T_current = mBVH->GetT0().inverse()*T_current;
-	Eigen::Isometry3d T_head = mTc*T_current;
+	Eigen::Isometry3d T_head = R_y(rotation) * mTc*T_current;
 	Eigen::Vector6d p_head = dart::dynamics::FreeJoint::convertToPositions(T_head);
 	p.head<6>() = p_head;
 
@@ -159,7 +159,7 @@ GetTargetPositions(double t,double dt)
 
 
 		double tdt_mod = std::fmod(t+dt, mBVH->GetMaxTime());
-		if(tdt_mod-dt<0.0){
+		if(tdt_mod-dt<0.0 && update){
 			Eigen::Isometry3d T01 = mBVH->GetT1()*(mBVH->GetT0().inverse());
 			Eigen::Vector3d p01 = dart::math::logMap(T01.linear());
 			p01[0] =0.0;
@@ -177,12 +177,11 @@ GetTargetPositions(double t,double dt)
 
 std::pair<Eigen::VectorXd,Eigen::VectorXd>
 Character::
-GetTargetPosAndVel(double t,double dt)
+GetTargetPosAndVel(double t,double dt, bool update, int rotation)
 {
-	Eigen::VectorXd p = this->GetTargetPositions(t,dt);
-	Eigen::Isometry3d Tc = mTc;
-	Eigen::VectorXd p1 = this->GetTargetPositions(t+dt,dt);
-	mTc = Tc;
+	Eigen::VectorXd p = this->GetTargetPositions(t,dt, update, rotation);
+	Eigen::VectorXd p0 = this->GetTargetPositions(t,dt, false);
+	Eigen::VectorXd p1 = this->GetTargetPositions(t+dt,dt, false);
 
-	return std::make_pair(p,(p1-p)/dt);
+	return std::make_pair(p,(p1-p0)/dt);
 }

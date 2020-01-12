@@ -4,23 +4,45 @@ sim_hz 1500
 skel_file /data/human.xml
 muscle_file /data/muscle284.xml
 #            bvh  joy
-reward_param 0.55 0.45 0.0 0.15
-num_envs 2
+reward_param 0.75 0.05 0.0 0.15
+num_envs 8
+
 0bvh_file /data/motion/walk.bvh true
-0joystick 0.0 0.0 1.0
+0joystick 0.0 0.0 1.15
+0y_rotation 0.0
 1bvh_file /data/motion/walk.bvh true
-1joystick 0.0 0.0 1.5
-#1bvh_file /data/motion/run.bvh true
-#1joystick 0.0 0.0 5.0
+1joystick 1.15 0.0 0.0 
+1y_rotation 90.0
 2bvh_file /data/motion/walk.bvh true
-2joystick 0.707 0.0 0.707
+2joystick 0.0 0.0 -1.15
+2y_rotation 180.0
 3bvh_file /data/motion/walk.bvh true
-3joystick -0.707 0.0 0.707
-4bvh_file /data/motion/run.bvh true
-4joystick 1.65 0.0 1.65
-5bvh_file /data/motion/run.bvh true
-5joystick -1.65 0.0 1.65
+3joystick -1.15 0.0 0.0 
+3y_rotation -90.0
+
+4bvh_file /data/motion/walk.bvh true
+4joystick 0.813 0.0 0.813
+4y_rotation 45.0
+5bvh_file /data/motion/walk.bvh true
+5joystick 0.813 0.0 -0.813
+5y_rotation 135.0
 6bvh_file /data/motion/walk.bvh true
-6joystick 1.0 0.0 0.0
+6joystick -0.813 0.0 -0.813
+6y_rotation -135.0
 7bvh_file /data/motion/walk.bvh true
-7joystick -1.0 0.0 0.0
+7joystick -0.813 0.0 0.813
+7y_rotation -45.0
+
+
+#8bvh_file /data/motion/walk.bvh true
+#8joystick -0.44 0.0 1.06
+#8y_rotation -22.5
+#5bvh_file /data/motion/run.bvh true
+#5joystick 1.65 0.0 1.65
+#5y_rotation 45.0
+#6bvh_file /data/motion/run.bvh true
+#6joystick -1.65 0.0 1.65
+#6y_rotation -45.0
+#7bvh_file /data/motion/walk.bvh true
+#7joystick -1.0 0.0 0.0
+#7y_rotation -90.0

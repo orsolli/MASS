@@ -99,6 +99,11 @@ Initialize(const std::string& meta_file,bool load_obj, int id)
 			ss>>x>>y>>z;
 			character->SetJoystick(x,y,z);
 		}
+		else if(!index.compare(prefix + "y_rotation")) {
+			double a;
+			ss>>a;
+			this->SetAngle(a);
+		}
 		else if(!index.compare("reward_param")){
 			double a,b,c,d;
 			ss>>a>>b>>c>>d;
@@ -175,12 +180,12 @@ Reset(bool RSI)
 
 	mAction.setZero();
 
-	std::pair<Eigen::VectorXd,Eigen::VectorXd> pv = mCharacter->GetTargetPosAndVel(t,1.0/mControlHz);
+	std::pair<Eigen::VectorXd,Eigen::VectorXd> pv = mCharacter->GetTargetPosAndVel(t,1.0/mControlHz, true, this->mAngle);
 	mTargetPositions = pv.first;
 	mTargetVelocities = pv.second;
 
 	mCharacter->GetSkeleton()->setPositions(mTargetPositions);
-	//mCharacter->GetSkeleton()->setVelocities(mTargetVelocities);
+	mCharacter->GetSkeleton()->setVelocities(mTargetVelocities);
 	mCharacter->GetSkeleton()->computeForwardKinematics(true,false,false);
 }
 void
@@ -341,7 +346,7 @@ SetAction(const Eigen::VectorXd& a)
 
 	double t = mWorld->getTime();
 
-	std::pair<Eigen::VectorXd,Eigen::VectorXd> pv = mCharacter->GetTargetPosAndVel(t,1.0/mControlHz);
+	std::pair<Eigen::VectorXd,Eigen::VectorXd> pv = mCharacter->GetTargetPosAndVel(t,1.0/mControlHz, true, this->mAngle);
 	mTargetPositions = pv.first;
 	mTargetVelocities = pv.second;
 
